@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^1.0.3 
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,6 +62,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/raiders-logo.png
+    - lib/assets/notes.svg
+    - lib/assets/profile.svg
+    - lib/assets/statistics.svg
+    - lib/assets/teams.svg    
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
