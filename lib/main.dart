@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:raiders_player_tracking/screens/HomeScreen.dart';
 import 'package:raiders_player_tracking/screens/LandingScreen.dart';
 import 'package:raiders_player_tracking/screens/Login.dart';
+import 'package:raiders_player_tracking/screens/PlayerStatsScreen.dart';
 import 'package:raiders_player_tracking/screens/ProfileScreen.dart';
 import 'package:raiders_player_tracking/screens/SignUp.dart';
 import 'package:raiders_player_tracking/screens/TeamsScreen.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/landing': (context) => LandingScreen(),
         '/teams': (context) => TeamsScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/player_stats': (context) => PlayerStatsScreen(),
       },
     );
   }
