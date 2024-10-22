@@ -282,6 +282,7 @@ class LandingScreen extends StatelessWidget {
                               title: 'Teams',
                               svgPath: 'lib/assets/teams.svg',
                               onTap: () {
+                                Navigator.pushNamed(context, '/teams');
                                 // Handle Teams navigation here
                               },
                             ),
@@ -303,6 +304,8 @@ class LandingScreen extends StatelessWidget {
                               title: 'My Profile',
                               svgPath: 'lib/assets/profile.svg',
                               onTap: () {
+                                Navigator.pushNamed(context, '/profile');
+
                                 // Handle Profile navigation here
                               },
                             ),
