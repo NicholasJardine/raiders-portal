@@ -420,6 +420,7 @@ class HomeScreen extends StatelessWidget {
                         // Sign In Button
                         ElevatedButton(
                           onPressed: () {
+                            Navigator.pushNamed(context, '/login');
                             // Add sign in functionality here
                           },
                           style: ElevatedButton.styleFrom(
@@ -444,6 +445,8 @@ class HomeScreen extends StatelessWidget {
                         // Sign Up Button
                         ElevatedButton(
                           onPressed: () {
+                            Navigator.pushNamed(context, '/signup');
+
                             // Add sign up functionality here
                           },
                           style: ElevatedButton.styleFrom(

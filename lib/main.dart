@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raiders_player_tracking/screens/HomeScreen.dart';
+import 'package:raiders_player_tracking/screens/LandingScreen.dart';
 import 'package:raiders_player_tracking/screens/Login.dart';
 import 'package:raiders_player_tracking/screens/SignUp.dart';
 
@@ -34,7 +35,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SignUpScreen(),
+      // home: const HomeScreen(),
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/landing': (context) => LandingScreen(),
+      },
     );
   }
 }
