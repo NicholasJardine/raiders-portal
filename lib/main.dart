@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:raiders_player_tracking/screens/HomeScreen.dart';
+import 'package:raiders_player_tracking/screens/Login.dart';
+import 'package:raiders_player_tracking/screens/SignUp.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: SignUpScreen(),
     );
   }
 }
