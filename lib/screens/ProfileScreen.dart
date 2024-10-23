@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -66,12 +67,13 @@ class ProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const CircleAvatar(
-                  radius: 50, // User profile image size
-                  backgroundImage: AssetImage(
-                      'lib/assets/profile.png'), // Path to user profile image
-                  backgroundColor: Colors.grey, // Fallback color if no image
-                ),
+                // SvgPicture.asset(
+                //   'lib/assets/profile.svg',
+                //   // svgPath,
+                //   width: 70, // Adjusted icon size
+                //   height: 70,
+                //   // color: Colors.orange, // Set icon color to match the buttons
+                // ),
                 const SizedBox(height: 20), // Space between avatar and details
 
                 // User Details Section
@@ -105,8 +107,17 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                            height: 20), // Space between title and details
+                        const SizedBox(height: 20),
+                        Center(
+                          child: SvgPicture.asset(
+                            'lib/assets/profile3.svg',
+                            // svgPath,
+                            width: 70, // Adjusted icon size
+                            height: 70,
+                            // color: Colors.orange, // Set icon color to match the buttons
+                          ),
+                        ), // Space between title and details
+                        const SizedBox(height: 20),
 
                         // Name Section
                         buildProfileDetail(
@@ -128,6 +139,31 @@ class ProfileScreen extends StatelessWidget {
 
                         // Other sections can be added here
                         buildProfileDetail(title: 'Position', value: 'Forward'),
+                        const SizedBox(height: 40),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/landing');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(0xFFFFA500), // Gold color
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 60, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: const Text(
+                              'Edit profile',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

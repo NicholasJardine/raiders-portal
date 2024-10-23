@@ -297,7 +297,7 @@ class LandingScreen extends StatelessWidget {
                               title: 'Notes',
                               svgPath: 'lib/assets/notes.svg',
                               onTap: () {
-                                // Handle Notes navigation here
+                                Navigator.pushNamed(context, '/notes');
                               },
                             ),
                             buildTile(

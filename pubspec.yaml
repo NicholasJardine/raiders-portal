@@ -64,6 +64,8 @@ flutter:
     - lib/assets/raiders-logo.png
     - lib/assets/notes.svg
     - lib/assets/profile.svg
+    - lib/assets/profile2.svg
+    - lib/assets/profile3.svg
     - lib/assets/statistics.svg
     - lib/assets/teams.svg    
   #   - images/a_dot_ham.jpeg
