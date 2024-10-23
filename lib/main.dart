@@ -4,6 +4,7 @@ import 'package:raiders_player_tracking/screens/HomeScreen.dart';
 import 'package:raiders_player_tracking/screens/LandingScreen.dart';
 import 'package:raiders_player_tracking/screens/Login.dart';
 import 'package:raiders_player_tracking/screens/NotesScreen.dart';
+import 'package:raiders_player_tracking/screens/PlayerSearchScreen.dart';
 import 'package:raiders_player_tracking/screens/PlayerStatsScreen.dart';
 import 'package:raiders_player_tracking/screens/ProfileScreen.dart';
 import 'package:raiders_player_tracking/screens/SignUp.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/player_stats': (context) => PlayerStatsScreen(),
         '/notes': (context) => NotesScreen(),
         '/add_details': (context) => AddPlayerDetails(),
+        '/player_search': (context) => PlayerSearchScreen(),
       },
     );
   }

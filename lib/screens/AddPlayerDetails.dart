@@ -625,7 +625,7 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     String weight = weightController.text;
     String height = heightController.text;
     String position = positionController.text;
-    String otherPosition = otherPositionController.text;
+    // String otherPosition = otherPositionController.text;
 
     print('Submitted Data: '
         'Name: $name, Surname: $surname, Email: $email, Cell: $cellNumber, '

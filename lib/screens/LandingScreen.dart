@@ -290,7 +290,8 @@ class LandingScreen extends StatelessWidget {
                               title: 'Player Stats',
                               svgPath: 'lib/assets/statistics.svg',
                               onTap: () {
-                                Navigator.pushNamed(context, '/player_stats');
+                                // Navigator.pushNamed(context, '/player_stats');
+                                Navigator.pushNamed(context, '/player_search');
                               },
                             ),
                             buildTile(
