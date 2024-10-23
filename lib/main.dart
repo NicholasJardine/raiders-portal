@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:raiders_player_tracking/screens/AddPlayerDetails.dart';
 import 'package:raiders_player_tracking/screens/HomeScreen.dart';
 import 'package:raiders_player_tracking/screens/LandingScreen.dart';
 import 'package:raiders_player_tracking/screens/Login.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => ProfileScreen(),
         '/player_stats': (context) => PlayerStatsScreen(),
         '/notes': (context) => NotesScreen(),
+        '/add_details': (context) => AddPlayerDetails(),
       },
     );
   }

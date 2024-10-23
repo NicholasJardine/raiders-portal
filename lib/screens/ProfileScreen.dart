@@ -143,7 +143,7 @@ class ProfileScreen extends StatelessWidget {
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/landing');
+                              Navigator.pushNamed(context, '/add_details');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
