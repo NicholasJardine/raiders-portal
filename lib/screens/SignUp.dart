@@ -778,7 +778,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ]);
 
       if (response[0].statusCode == 200) {
-        Navigator.pushNamed(context, '/landing');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('Successful sign up! Login to start your journey')),
+        );
+        Navigator.pushNamed(context, '/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Some credentials you entered are not valid')),

@@ -866,8 +866,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:raiders_player_tracking/services/auth_service.dart';
-import 'package:raiders_player_tracking/services/profile_service.dart';
+import 'package:raiders_player_tracking/services/auth_service.dart' as auth;
+import 'package:raiders_player_tracking/services/profile_service.dart'
+    as profile;
 
 class AddPlayerDetails extends StatefulWidget {
   @override
@@ -899,7 +900,8 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     'Full-back'
   ];
 
-  final AuthService _profileService = AuthService();
+  final profile.AuthService _profileService = profile.AuthService();
+  final auth.AuthService _authService = auth.AuthService();
 
   void _submitPlayerDetails() async {
     setState(() {
@@ -929,6 +931,11 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     }
   }
 
+  void _logout() async {
+    await _authService.logout();
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -940,6 +947,22 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.dark,
         ),
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(Icons.menu, color: Colors.white),
+            onSelected: (value) {
+              if (value == 'logout') _logout();
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: 'logout',
+                  child: Text('Logout'),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
