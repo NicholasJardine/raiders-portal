@@ -593,9 +593,281 @@
 //   }
 // }
 
+// import 'dart:ui';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+
+// class AddPlayerDetails extends StatefulWidget {
+//   @override
+//   _AddPlayerDetailsState createState() => _AddPlayerDetailsState();
+// }
+
+// class _AddPlayerDetailsState extends State<AddPlayerDetails> {
+//   final PageController _pageController = PageController(initialPage: 0);
+//   final TextEditingController nameController = TextEditingController();
+//   final TextEditingController surnameController = TextEditingController();
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController cellNumberController = TextEditingController();
+//   final TextEditingController ageController = TextEditingController();
+//   final TextEditingController idPassportController = TextEditingController();
+//   final TextEditingController weightController = TextEditingController();
+//   final TextEditingController heightController = TextEditingController();
+//   final TextEditingController positionController = TextEditingController();
+//   final TextEditingController otherPositionController = TextEditingController();
+
+//   void _submitPlayerDetails() {
+//     String name = nameController.text;
+//     String surname = surnameController.text;
+//     String email = emailController.text;
+//     String cellNumber = cellNumberController.text;
+//     String age = ageController.text;
+//     String idPassport = idPassportController.text;
+//     String weight = weightController.text;
+//     String height = heightController.text;
+//     String position = positionController.text;
+//     // String otherPosition = otherPositionController.text;
+
+//     print('Submitted Data: '
+//         'Name: $name, Surname: $surname, Email: $email, Cell: $cellNumber, '
+//         'Age: $age, ID/Passport: $idPassport, Weight: $weight, Height: $height, '
+//         'Position: $position,');
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black, // Same background color
+//       extendBodyBehindAppBar: true,
+//       appBar: AppBar(
+//         backgroundColor: Colors.transparent, // Transparent app bar
+//         elevation: 0,
+//         systemOverlayStyle: const SystemUiOverlayStyle(
+//           statusBarBrightness: Brightness.dark,
+//         ),
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
+//         child: SizedBox(
+//           height: MediaQuery.of(context).size.height,
+//           child: Stack(
+//             children: [
+//               Align(
+//                 alignment: AlignmentDirectional(3, -0.3),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.deepPurple,
+//                   ),
+//                 ),
+//               ),
+//               Align(
+//                 alignment: AlignmentDirectional(-3, -0.3),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.deepPurple,
+//                   ),
+//                 ),
+//               ),
+//               Align(
+//                 alignment: AlignmentDirectional(0, -1.2),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//               BackdropFilter(
+//                 filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+//                 child: Container(
+//                   decoration: const BoxDecoration(color: Colors.transparent),
+//                 ),
+//               ),
+//               // PageView for the form steps
+//               PageView(
+//                 controller: _pageController,
+//                 physics: NeverScrollableScrollPhysics(), // Disable swiping
+//                 children: [
+//                   // First page
+//                   _buildPageOne(context),
+//                   // Second page
+//                   _buildPageTwo(context),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   // First page with basic details
+//   Widget _buildPageOne(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Image.asset(
+//             'lib/assets/raiders-logo.png', // Path to your logo
+//             width: 150,
+//             height: 150,
+//             fit: BoxFit.contain,
+//           ),
+//           const SizedBox(height: 30),
+//           Card(
+//             color: Colors.grey[900], // Dark background for the card
+//             elevation: 5,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(20),
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: Column(
+//                 children: [
+//                   Center(
+//                     child: Text(
+//                       "Fill in your details",
+//                       style: TextStyle(color: Colors.white, fontSize: 24),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 30),
+//                   _buildTextField("Name", nameController),
+//                   _buildTextField("Surname", surnameController),
+//                   _buildTextField("Email", emailController),
+//                   _buildTextField("Cell Number", cellNumberController),
+//                   const SizedBox(height: 30),
+//                   ElevatedButton(
+//                     onPressed: () {
+//                       _pageController.nextPage(
+//                           duration: Duration(milliseconds: 300),
+//                           curve: Curves.easeIn);
+//                     },
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFFFA500), // Gold color
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 60, vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(30),
+//                       ),
+//                     ),
+//                     child: const Text(
+//                       'Next',
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Second page with player data
+//   Widget _buildPageTwo(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Image.asset(
+//             'lib/assets/raiders-logo.png', // Path to your logo
+//             width: 150,
+//             height: 150,
+//             fit: BoxFit.contain,
+//           ),
+//           const SizedBox(height: 30),
+//           Card(
+//             color: Colors.grey[900], // Dark background for the card
+//             elevation: 5,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(20),
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: Column(
+//                 children: [
+//                   Center(
+//                     child: Text(
+//                       "Player Details",
+//                       style: TextStyle(color: Colors.white, fontSize: 24),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 30),
+//                   _buildTextField("Age", ageController),
+//                   _buildTextField("ID/Passport", idPassportController),
+//                   _buildTextField("Weight", weightController),
+//                   _buildTextField("Height", heightController),
+//                   _buildTextField("Position", positionController),
+//                   // _buildTextField("Other Position", otherPositionController),
+//                   const SizedBox(height: 30),
+//                   ElevatedButton(
+//                     onPressed: _submitPlayerDetails,
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFFFA500), // Gold color
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 60, vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(30),
+//                       ),
+//                     ),
+//                     child: const Text(
+//                       'Submit',
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Method to build form fields
+//   Widget _buildTextField(String label, TextEditingController controller) {
+//     return Column(
+//       children: [
+//         TextField(
+//           controller: controller,
+//           decoration: InputDecoration(
+//             labelText: label,
+//             labelStyle: const TextStyle(color: Colors.white),
+//             filled: true,
+//             fillColor: Colors.grey[800],
+//             border: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(30),
+//             ),
+//           ),
+//           style: const TextStyle(color: Colors.white),
+//         ),
+//         const SizedBox(height: 20),
+//       ],
+//     );
+//   }
+// }
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:raiders_player_tracking/services/auth_service.dart';
+import 'package:raiders_player_tracking/services/profile_service.dart';
 
 class AddPlayerDetails extends StatefulWidget {
   @override
@@ -612,34 +884,58 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
   final TextEditingController idPassportController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
-  final TextEditingController positionController = TextEditingController();
-  final TextEditingController otherPositionController = TextEditingController();
+  String? _selectedPosition;
 
-  void _submitPlayerDetails() {
-    String name = nameController.text;
-    String surname = surnameController.text;
-    String email = emailController.text;
-    String cellNumber = cellNumberController.text;
-    String age = ageController.text;
-    String idPassport = idPassportController.text;
-    String weight = weightController.text;
-    String height = heightController.text;
-    String position = positionController.text;
-    // String otherPosition = otherPositionController.text;
+  final List<String> _positions = [
+    'Prop',
+    'Hooker',
+    'Lock',
+    'Flanker',
+    'Number 8',
+    'Scrum-half',
+    'Fly-half',
+    'Wing',
+    'Center',
+    'Full-back'
+  ];
 
-    print('Submitted Data: '
-        'Name: $name, Surname: $surname, Email: $email, Cell: $cellNumber, '
-        'Age: $age, ID/Passport: $idPassport, Weight: $weight, Height: $height, '
-        'Position: $position,');
+  final AuthService _profileService = AuthService();
+
+  void _submitPlayerDetails() async {
+    setState(() {
+      // Optionally display a loading indicator here
+    });
+
+    final response = await _profileService.createProfile(
+      firstName: nameController.text,
+      lastName: surnameController.text,
+      age: int.tryParse(ageController.text) ?? 0,
+      idOrPassportNumber: idPassportController.text,
+      weight: double.tryParse(weightController.text) ?? 0.0,
+      height: double.tryParse(heightController.text) ?? 0.0,
+      position: _selectedPosition ?? 'Position not selected',
+    );
+
+    setState(() {
+      // Remove loading indicator here
+    });
+
+    if (response != null && response.statusCode == 200) {
+      // Navigate to another page or display success message
+      print("Profile created successfully");
+    } else {
+      // Show an error message
+      print("Failed to create profile");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Same background color
+      backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Transparent app bar
+        backgroundColor: Colors.transparent,
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.dark,
@@ -690,14 +986,11 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
                   decoration: const BoxDecoration(color: Colors.transparent),
                 ),
               ),
-              // PageView for the form steps
               PageView(
                 controller: _pageController,
-                physics: NeverScrollableScrollPhysics(), // Disable swiping
+                physics: NeverScrollableScrollPhysics(),
                 children: [
-                  // First page
                   _buildPageOne(context),
-                  // Second page
                   _buildPageTwo(context),
                 ],
               ),
@@ -708,21 +1001,20 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     );
   }
 
-  // First page with basic details
   Widget _buildPageOne(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'lib/assets/raiders-logo.png', // Path to your logo
+            'lib/assets/raiders-logo.png',
             width: 150,
             height: 150,
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 30),
           Card(
-            color: Colors.grey[900], // Dark background for the card
+            color: Colors.grey[900],
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -750,7 +1042,7 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
                           curve: Curves.easeIn);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFA500), // Gold color
+                      backgroundColor: const Color(0xFFFFA500),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 60, vertical: 15),
                       shape: RoundedRectangleBorder(
@@ -775,21 +1067,20 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     );
   }
 
-  // Second page with player data
   Widget _buildPageTwo(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            'lib/assets/raiders-logo.png', // Path to your logo
+            'lib/assets/raiders-logo.png',
             width: 150,
             height: 150,
             fit: BoxFit.contain,
           ),
           const SizedBox(height: 30),
           Card(
-            color: Colors.grey[900], // Dark background for the card
+            color: Colors.grey[900],
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -809,13 +1100,12 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
                   _buildTextField("ID/Passport", idPassportController),
                   _buildTextField("Weight", weightController),
                   _buildTextField("Height", heightController),
-                  _buildTextField("Position", positionController),
-                  // _buildTextField("Other Position", otherPositionController),
+                  _buildPositionDropdown(),
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: _submitPlayerDetails,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFA500), // Gold color
+                      backgroundColor: const Color(0xFFFFA500),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 60, vertical: 15),
                       shape: RoundedRectangleBorder(
@@ -840,7 +1130,39 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     );
   }
 
-  // Method to build form fields
+  Widget _buildPositionDropdown() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: "Position",
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.grey[800],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        dropdownColor: Colors.grey[900],
+        value: _selectedPosition,
+        onChanged: (String? newValue) {
+          setState(() {
+            _selectedPosition = newValue;
+          });
+        },
+        items: _positions.map((position) {
+          return DropdownMenuItem<String>(
+            value: position,
+            child: Text(
+              position,
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Widget _buildTextField(String label, TextEditingController controller) {
     return Column(
       children: [
