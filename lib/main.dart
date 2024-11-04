@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpScreen(),
         '/landing': (context) => LandingScreen(),
         '/teams': (context) => TeamsScreen(),
-        '/profile': (context) => ProfileScreen(),
+        '/profile': (context) => ProfileScreen(
+            playerId: ModalRoute.of(context)!.settings.arguments as String),
         '/player_stats': (context) => PlayerStatsScreen(),
         '/notes': (context) => NotesScreen(),
         '/add_details': (context) => AddPlayerDetails(),

@@ -756,7 +756,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String email = emailController.text;
     String password = passwordController.text;
     String confirmPassword = confirmPasswordController.text;
-    String role = roleController.text;
+    // String role = roleController.text;
 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -773,7 +773,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     try {
       final response = await Future.wait([
-        _authService.signUp(email, password, role),
+        _authService.signUp(email, password, selectedRole),
         Future.delayed(minDisplayTime),
       ]);
 

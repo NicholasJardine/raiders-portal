@@ -129,6 +129,7 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class AuthService {
   final _storage = FlutterSecureStorage();
@@ -183,5 +184,24 @@ class AuthService {
   Future<void> logout() async {
     await deleteToken(); // Clear the stored token to log out the user
     print('User logged out successfully.');
+  }
+
+  Future<String?> getUserIdFromToken() async {
+    // Read the token from secure storage
+    final token = await _storage.read(key: 'auth_token');
+    if (token == null) {
+      return null;
+    }
+
+    try {
+      // Decode the JWT token
+      final jwt = JWT.decode(token);
+      // Retrieve userId from the payload
+      final userId = jwt.payload['userId'];
+      return userId?.toString(); // Ensure it's a string
+    } catch (e) {
+      print("Failed to decode token: $e");
+      return null;
+    }
   }
 }
