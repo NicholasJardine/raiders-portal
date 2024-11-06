@@ -735,6 +735,321 @@
 //   }
 // }
 
+// import 'dart:io';
+// import 'dart:ui';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:raiders_player_tracking/services/players_service.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
+
+// class ProfileScreen extends StatefulWidget {
+//   final String playerId;
+
+//   const ProfileScreen({Key? key, required this.playerId}) : super(key: key);
+
+//   @override
+//   _ProfileScreenState createState() => _ProfileScreenState();
+// }
+
+// class _ProfileScreenState extends State<ProfileScreen> {
+//   final PlayersService _playersService = PlayersService();
+//   Map<String, dynamic>? _playerProfile;
+//   bool _isLoading = true;
+//   final ImagePicker _picker = ImagePicker();
+//   File? _selectedImage;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _fetchPlayerProfile();
+//   }
+
+//   Future<void> _fetchPlayerProfile() async {
+//     try {
+//       final profile = await _playersService.getPlayerById(widget.playerId);
+//       setState(() {
+//         _playerProfile = profile;
+//         _isLoading = false;
+//       });
+//     } catch (e) {
+//       print('Error fetching player profile: $e');
+//       setState(() {
+//         _isLoading = false;
+//       });
+//     }
+//   }
+
+//   Future<void> _pickImage(ImageSource source) async {
+//     PermissionStatus permissionStatus = PermissionStatus.denied; // Default
+
+//     if (source == ImageSource.camera) {
+//       permissionStatus = await Permission.camera.request();
+//     } else if (source == ImageSource.gallery) {
+//       if (Platform.isAndroid) {
+//         // Get the Android API level
+//         final deviceInfo = DeviceInfoPlugin();
+//         final androidInfo = await deviceInfo.androidInfo;
+//         int androidVersion = androidInfo.version.sdkInt;
+
+//         if (androidVersion >= 33) {
+//           // Android 13+ (API level 33), request access to photos
+//           permissionStatus = await Permission.photos.request();
+//         } else {
+//           // For older Android versions, request storage permission
+//           permissionStatus = await Permission.storage.request();
+//         }
+//       }
+//     }
+
+//     if (permissionStatus.isGranted) {
+//       final pickedFile = await _picker.pickImage(source: source);
+//       if (pickedFile != null) {
+//         setState(() {
+//           _selectedImage = File(pickedFile.path);
+//         });
+//       }
+//     } else if (permissionStatus.isPermanentlyDenied) {
+//       await openAppSettings();
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       extendBodyBehindAppBar: true,
+//       appBar: AppBar(
+//         title: const Text('Profile'),
+//         backgroundColor: Colors.transparent,
+//         elevation: 0,
+//       ),
+//       body: Stack(
+//         children: [
+//           _buildBackground(),
+//           _isLoading
+//               ? Center(child: CircularProgressIndicator())
+//               : _buildProfileContent(),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildBackground() {
+//     return Stack(
+//       children: [
+//         Align(
+//           alignment: AlignmentDirectional(3, -0.3),
+//           child: Container(
+//             height: 300,
+//             width: 300,
+//             decoration: const BoxDecoration(
+//               shape: BoxShape.circle,
+//               color: Colors.deepPurple,
+//             ),
+//           ),
+//         ),
+//         Align(
+//           alignment: AlignmentDirectional(-3, -0.3),
+//           child: Container(
+//             height: 300,
+//             width: 300,
+//             decoration: const BoxDecoration(
+//               shape: BoxShape.circle,
+//               color: Colors.deepPurple,
+//             ),
+//           ),
+//         ),
+//         Align(
+//           alignment: AlignmentDirectional(0, -1.2),
+//           child: Container(
+//             height: 300,
+//             width: 300,
+//             decoration: const BoxDecoration(
+//               shape: BoxShape.circle,
+//               color: Colors.white,
+//             ),
+//           ),
+//         ),
+//         BackdropFilter(
+//           filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+//           child: Container(
+//             decoration: const BoxDecoration(color: Colors.transparent),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+
+//   Widget _buildProfileContent() {
+//     return Padding(
+//       padding: const EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.start,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           const SizedBox(height: 20),
+//           Flexible(
+//             child: Container(
+//               padding: const EdgeInsets.all(16.0),
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[900],
+//                 borderRadius: BorderRadius.circular(20),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.black.withOpacity(0.3),
+//                     spreadRadius: 3,
+//                     blurRadius: 10,
+//                     offset: const Offset(0, 3),
+//                   ),
+//                 ],
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   const Center(
+//                     child: Text(
+//                       'User Information',
+//                       style: TextStyle(
+//                         fontSize: 24,
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 20),
+//                   Center(
+//                     child: GestureDetector(
+//                       onTap: () => _showImageSourceDialog(),
+//                       child: Stack(
+//                         alignment: Alignment.center,
+//                         children: [
+//                           CircleAvatar(
+//                             radius: 50,
+//                             backgroundImage: _selectedImage != null
+//                                 ? FileImage(_selectedImage!)
+//                                 : (_playerProfile?['avatar_url'] != null
+//                                     ? NetworkImage(
+//                                         _playerProfile!['avatar_url'])
+//                                     : null),
+//                             backgroundColor: Colors.transparent,
+//                           ),
+//                           if (_selectedImage == null &&
+//                               _playerProfile?['avatar_url'] == null)
+//                             SvgPicture.asset(
+//                               'lib/assets/profile3.svg', // Path to your SVG asset
+//                               height: 100,
+//                               width: 100,
+//                             ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 20),
+//                   buildProfileDetail(
+//                     title: 'Full Name',
+//                     value:
+//                         '${_playerProfile?['first_name']} ${_playerProfile?['last_name']}',
+//                   ),
+//                   const SizedBox(height: 10),
+//                   buildProfileDetail(
+//                     title: 'Email',
+//                     value: _playerProfile?['email'] ?? 'N/A',
+//                   ),
+//                   const SizedBox(height: 10),
+//                   buildProfileDetail(
+//                     title: 'Position',
+//                     value: _playerProfile?['position'] ?? 'N/A',
+//                   ),
+//                   const SizedBox(height: 40),
+//                   Center(
+//                     child: ElevatedButton(
+//                       onPressed: () {
+//                         Navigator.pushNamed(context, '/add_details');
+//                       },
+//                       style: ElevatedButton.styleFrom(
+//                         backgroundColor: const Color(0xFFFFA500),
+//                         padding: const EdgeInsets.symmetric(
+//                             horizontal: 60, vertical: 15),
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadius.circular(30),
+//                         ),
+//                       ),
+//                       child: const Text(
+//                         'Edit profile',
+//                         style: TextStyle(
+//                           color: Colors.white,
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   void _showImageSourceDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (context) {
+//         return AlertDialog(
+//           title: const Text("Choose an option"),
+//           actions: [
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//                 _pickImage(ImageSource.camera);
+//               },
+//               child: const Text("Camera"),
+//             ),
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//                 _pickImage(ImageSource.gallery);
+//               },
+//               child: const Text("Gallery"),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+
+//   Widget buildProfileDetail({required String title, required String value}) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Text(
+//           title,
+//           style: const TextStyle(
+//             color: Colors.orange,
+//             fontWeight: FontWeight.bold,
+//             fontSize: 16,
+//           ),
+//         ),
+//         const SizedBox(height: 5),
+//         Text(
+//           value,
+//           style: const TextStyle(
+//             color: Colors.white,
+//             fontSize: 16,
+//           ),
+//         ),
+//         const Divider(
+//           color: Colors.white54,
+//         ),
+//       ],
+//     );
+//   }
+// }
+
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -742,7 +1057,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:raiders_player_tracking/services/players_service.dart';
+import 'package:raiders_player_tracking/services/avatar_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:convert';
 
 class ProfileScreen extends StatefulWidget {
   final String playerId;
@@ -755,6 +1072,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final PlayersService _playersService = PlayersService();
+  final AvatarService _avatarService =
+      AvatarService(); // Initialize AvatarService
   Map<String, dynamic>? _playerProfile;
   bool _isLoading = true;
   final ImagePicker _picker = ImagePicker();
@@ -782,22 +1101,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    PermissionStatus permissionStatus = PermissionStatus.denied; // Default
+    PermissionStatus permissionStatus = PermissionStatus.denied;
 
     if (source == ImageSource.camera) {
       permissionStatus = await Permission.camera.request();
     } else if (source == ImageSource.gallery) {
       if (Platform.isAndroid) {
-        // Get the Android API level
         final deviceInfo = DeviceInfoPlugin();
         final androidInfo = await deviceInfo.androidInfo;
         int androidVersion = androidInfo.version.sdkInt;
 
         if (androidVersion >= 33) {
-          // Android 13+ (API level 33), request access to photos
           permissionStatus = await Permission.photos.request();
         } else {
-          // For older Android versions, request storage permission
           permissionStatus = await Permission.storage.request();
         }
       }
@@ -809,9 +1125,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _selectedImage = File(pickedFile.path);
         });
+        await _uploadAvatar(File(pickedFile.path));
       }
     } else if (permissionStatus.isPermanentlyDenied) {
       await openAppSettings();
+    }
+  }
+
+  Future<void> _uploadAvatar(File image) async {
+    try {
+      final response = await _avatarService.uploadAvatar(image);
+      if (response.statusCode == 200) {
+        final updatedProfile = jsonDecode(response.body)['profile'];
+        setState(() {
+          _playerProfile =
+              updatedProfile; // Update the profile data with the new avatar URL
+        });
+        print("Avatar uploaded successfully.");
+      } else {
+        print("Failed to upload avatar. Status Code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error uploading avatar: $e");
     }
   }
 
@@ -928,11 +1263,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           CircleAvatar(
                             radius: 50,
                             backgroundImage: _selectedImage != null
-                                ? FileImage(_selectedImage!)
+                                ? FileImage(
+                                    _selectedImage!) // Use selected image if available
                                 : (_playerProfile?['avatar_url'] != null
-                                    ? NetworkImage(
-                                        _playerProfile!['avatar_url'])
-                                    : null),
+                                    ? NetworkImage(_playerProfile![
+                                        'avatar_url']) // Load from S3 if avatar_url is set
+                                    : null), // No image case
                             backgroundColor: Colors.transparent,
                           ),
                           if (_selectedImage == null &&
