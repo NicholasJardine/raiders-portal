@@ -869,8 +869,12 @@ import 'package:flutter/services.dart';
 import 'package:raiders_player_tracking/services/auth_service.dart' as auth;
 import 'package:raiders_player_tracking/services/profile_service.dart'
     as profile;
+import 'package:raiders_player_tracking/services/players_service.dart';
 
 class AddPlayerDetails extends StatefulWidget {
+  final String userId; // Add userId as a parameter
+  const AddPlayerDetails({Key? key, required this.userId}) : super(key: key);
+
   @override
   _AddPlayerDetailsState createState() => _AddPlayerDetailsState();
 }
@@ -886,12 +890,13 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
   String? _selectedPosition;
+  final PlayersService _playersService = PlayersService();
 
   final List<String> _positions = [
     'Prop',
     'Hooker',
     'Lock',
-    'Flanker',
+    'Flank',
     'Number 8',
     'Scrum-half',
     'Fly-half',
@@ -936,12 +941,50 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     Navigator.pushReplacementNamed(context, '/login');
   }
 
+  Future<void> _loadPlayerData() async {
+    // Retrieve the user ID from the route arguments
+    final userId = await _authService.getUserIdFromToken(); // Await the result
+    if (userId == null) {
+      print("User ID not found");
+      return;
+    }
+
+    try {
+      // Fetch player profile data using the user ID
+      final playerData = await _playersService.getPlayerById(userId);
+
+      if (playerData != null) {
+        setState(() {
+          // Populate all fields with the fetched player data
+          nameController.text = playerData['first_name'] ?? '';
+          surnameController.text = playerData['last_name'] ?? '';
+          emailController.text = playerData['email'] ?? '';
+          cellNumberController.text = playerData['cell_number'] ?? '';
+          ageController.text = playerData['age']?.toString() ?? '';
+          idPassportController.text = playerData['id_or_passport'] ?? '';
+          weightController.text = playerData['weight']?.toString() ?? '';
+          heightController.text = playerData['height']?.toString() ?? '';
+          _selectedPosition = playerData['position'];
+        });
+      }
+    } catch (e) {
+      print("Error loading player data: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlayerData(); // Fetch player data when the widget loads
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.transparent,
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(

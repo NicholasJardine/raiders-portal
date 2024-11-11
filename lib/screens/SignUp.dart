@@ -750,13 +750,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String selectedRole = 'player'; // Default role
   final AuthService _authService = AuthService();
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   // Function to handle sign up
   void _signUp() async {
     String email = emailController.text;
     String password = passwordController.text;
     String confirmPassword = confirmPasswordController.text;
-    // String role = roleController.text;
 
     if (password != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -862,18 +863,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Add the Raiders logo
                     Image.asset(
                       'lib/assets/raiders-logo.png', // Replace with the path to your logo
                       width: 150,
                       height: 150,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(height: 30), // Space below the logo
-
-                    // Card to hold the form
+                    const SizedBox(height: 30),
                     Card(
-                      color: Colors.grey[900], // Dark background for the card
+                      color: Colors.grey[900],
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -890,10 +888,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             const SizedBox(height: 30),
-                            // Email Field
                             TextField(
                               controller: emailController,
                               decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Colors.white,
+                                ),
                                 labelText: 'Email',
                                 labelStyle:
                                     const TextStyle(color: Colors.white),
@@ -906,10 +907,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             const SizedBox(height: 20),
-                            // Role Dropdown
                             DropdownButtonFormField<String>(
                               value: selectedRole,
                               decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
                                 labelText: 'Role',
                                 labelStyle:
                                     const TextStyle(color: Colors.white),
@@ -920,16 +924,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
                               dropdownColor: Colors.grey[900],
+                              borderRadius: BorderRadius.circular(10),
                               style: const TextStyle(color: Colors.white),
                               items: [
                                 DropdownMenuItem(
-                                  value: 'player',
-                                  child: Text('Player'),
-                                ),
+                                    value: 'player', child: Text('Player')),
                                 DropdownMenuItem(
-                                  value: 'admin',
-                                  child: Text('Admin'),
-                                ),
+                                    value: 'admin', child: Text('Admin'))
                               ],
                               onChanged: (value) {
                                 setState(() {
@@ -941,8 +942,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             // Password Field
                             TextField(
                               controller: passwordController,
-                              obscureText: true,
+                              obscureText: !_isPasswordVisible,
                               decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
+                                ),
                                 labelText: 'Password',
                                 labelStyle:
                                     const TextStyle(color: Colors.white),
@@ -958,8 +976,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             // Confirm Password Field
                             TextField(
                               controller: confirmPasswordController,
-                              obscureText: true,
+                              obscureText: !_isConfirmPasswordVisible,
                               decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isConfirmPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isConfirmPasswordVisible =
+                                          !_isConfirmPasswordVisible;
+                                    });
+                                  },
+                                ),
                                 labelText: 'Confirm Password',
                                 labelStyle:
                                     const TextStyle(color: Colors.white),
@@ -973,12 +1009,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 30),
                             _isLoading
-                                ? CircularProgressIndicator() // Loading indicator
+                                ? CircularProgressIndicator()
                                 : ElevatedButton(
                                     onPressed: _signUp,
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          const Color(0xFFFFA500), // Gold color
+                                      backgroundColor: const Color(0xFFFFA500),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 60, vertical: 15),
                                       shape: RoundedRectangleBorder(

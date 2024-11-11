@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
             playerId: ModalRoute.of(context)!.settings.arguments as String),
         '/player_stats': (context) => PlayerStatsScreen(),
         '/notes': (context) => NotesScreen(),
-        '/add_details': (context) => AddPlayerDetails(),
+        '/add_details': (context) => AddPlayerDetails(
+            userId: ModalRoute.of(context)!.settings.arguments as String),
         '/player_search': (context) => PlayerSearchScreen(),
       },
     );
