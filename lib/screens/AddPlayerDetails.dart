@@ -863,6 +863,394 @@
 //   }
 // }
 
+// import 'dart:ui';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:raiders_player_tracking/services/auth_service.dart' as auth;
+// import 'package:raiders_player_tracking/services/profile_service.dart'
+//     as profile;
+// import 'package:raiders_player_tracking/services/players_service.dart';
+
+// class AddPlayerDetails extends StatefulWidget {
+//   final String userId; // Add userId as a parameter
+//   const AddPlayerDetails({Key? key, required this.userId}) : super(key: key);
+
+//   @override
+//   _AddPlayerDetailsState createState() => _AddPlayerDetailsState();
+// }
+
+// class _AddPlayerDetailsState extends State<AddPlayerDetails> {
+//   final PageController _pageController = PageController(initialPage: 0);
+//   final TextEditingController nameController = TextEditingController();
+//   final TextEditingController surnameController = TextEditingController();
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController cellNumberController = TextEditingController();
+//   final TextEditingController ageController = TextEditingController();
+//   final TextEditingController idPassportController = TextEditingController();
+//   final TextEditingController weightController = TextEditingController();
+//   final TextEditingController heightController = TextEditingController();
+//   String? _selectedPosition;
+//   final PlayersService _playersService = PlayersService();
+
+//   final List<String> _positions = [
+//     'Prop',
+//     'Hooker',
+//     'Lock',
+//     'Flank',
+//     'Number 8',
+//     'Scrum-half',
+//     'Fly-half',
+//     'Wing',
+//     'Center',
+//     'Full-back'
+//   ];
+
+//   final profile.AuthService _profileService = profile.AuthService();
+//   final auth.AuthService _authService = auth.AuthService();
+
+//   void _submitPlayerDetails() async {
+//     setState(() {
+//       // Optionally display a loading indicator here
+//     });
+
+//     final response = await _profileService.createProfile(
+//       firstName: nameController.text,
+//       lastName: surnameController.text,
+//       age: int.tryParse(ageController.text) ?? 0,
+//       idOrPassportNumber: idPassportController.text,
+//       weight: double.tryParse(weightController.text) ?? 0.0,
+//       height: double.tryParse(heightController.text) ?? 0.0,
+//       position: _selectedPosition ?? 'Position not selected',
+//     );
+
+//     setState(() {
+//       // Remove loading indicator here
+//     });
+
+//     if (response != null && response.statusCode == 200) {
+//       // Navigate to another page or display success message
+//       print("Profile created successfully");
+//     } else {
+//       // Show an error message
+//       print("Failed to create profile");
+//     }
+//   }
+
+//   void _logout() async {
+//     await _authService.logout();
+//     Navigator.pushReplacementNamed(context, '/login');
+//   }
+
+//   Future<void> _loadPlayerData() async {
+//     // Retrieve the user ID from the route arguments
+//     final userId = await _authService.getUserIdFromToken(); // Await the result
+//     if (userId == null) {
+//       print("User ID not found");
+//       return;
+//     }
+
+//     try {
+//       // Fetch player profile data using the user ID
+//       final playerData = await _playersService.getPlayerById(userId);
+
+//       if (playerData != null) {
+//         setState(() {
+//           // Populate all fields with the fetched player data
+//           nameController.text = playerData['first_name'] ?? '';
+//           surnameController.text = playerData['last_name'] ?? '';
+//           emailController.text = playerData['email'] ?? '';
+//           cellNumberController.text = playerData['cell_number'] ?? '';
+//           ageController.text = playerData['age']?.toString() ?? '';
+//           idPassportController.text = playerData['id_or_passport'] ?? '';
+//           weightController.text = playerData['weight']?.toString() ?? '';
+//           heightController.text = playerData['height']?.toString() ?? '';
+//           _selectedPosition = playerData['position'];
+//         });
+//       }
+//     } catch (e) {
+//       print("Error loading player data: $e");
+//     }
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _loadPlayerData(); // Fetch player data when the widget loads
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.black,
+//       extendBodyBehindAppBar: true,
+//       appBar: AppBar(
+//         iconTheme: IconThemeData(color: Colors.white),
+//         backgroundColor: Colors.transparent,
+//         elevation: 0,
+//         systemOverlayStyle: const SystemUiOverlayStyle(
+//           statusBarBrightness: Brightness.dark,
+//         ),
+//         actions: [
+//           PopupMenuButton<String>(
+//             icon: Icon(Icons.menu, color: Colors.white),
+//             onSelected: (value) {
+//               if (value == 'logout') _logout();
+//             },
+//             itemBuilder: (BuildContext context) {
+//               return [
+//                 PopupMenuItem<String>(
+//                   value: 'logout',
+//                   child: Text('Logout'),
+//                 ),
+//               ];
+//             },
+//           ),
+//         ],
+//       ),
+//       body: Padding(
+//         padding: EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
+//         child: SizedBox(
+//           height: MediaQuery.of(context).size.height,
+//           child: Stack(
+//             children: [
+//               Align(
+//                 alignment: AlignmentDirectional(3, -0.3),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.deepPurple,
+//                   ),
+//                 ),
+//               ),
+//               Align(
+//                 alignment: AlignmentDirectional(-3, -0.3),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.deepPurple,
+//                   ),
+//                 ),
+//               ),
+//               Align(
+//                 alignment: AlignmentDirectional(0, -1.2),
+//                 child: Container(
+//                   height: 300,
+//                   width: 300,
+//                   decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//               ),
+//               BackdropFilter(
+//                 filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
+//                 child: Container(
+//                   decoration: const BoxDecoration(color: Colors.transparent),
+//                 ),
+//               ),
+//               PageView(
+//                 controller: _pageController,
+//                 physics: NeverScrollableScrollPhysics(),
+//                 children: [
+//                   _buildPageOne(context),
+//                   _buildPageTwo(context),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildPageOne(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Image.asset(
+//             'lib/assets/raiders-logo.png',
+//             width: 150,
+//             height: 150,
+//             fit: BoxFit.contain,
+//           ),
+//           const SizedBox(height: 30),
+//           Card(
+//             color: Colors.grey[900],
+//             elevation: 5,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(20),
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: Column(
+//                 children: [
+//                   Center(
+//                     child: Text(
+//                       "Fill in your details",
+//                       style: TextStyle(color: Colors.white, fontSize: 24),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 30),
+//                   _buildTextField("Name", nameController),
+//                   _buildTextField("Surname", surnameController),
+//                   _buildTextField("Email", emailController),
+//                   _buildTextField("Cell Number", cellNumberController),
+//                   const SizedBox(height: 30),
+//                   ElevatedButton(
+//                     onPressed: () {
+//                       _pageController.nextPage(
+//                           duration: Duration(milliseconds: 300),
+//                           curve: Curves.easeIn);
+//                     },
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFFFA500),
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 60, vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(30),
+//                       ),
+//                     ),
+//                     child: const Text(
+//                       'Next',
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildPageTwo(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Image.asset(
+//             'lib/assets/raiders-logo.png',
+//             width: 150,
+//             height: 150,
+//             fit: BoxFit.contain,
+//           ),
+//           const SizedBox(height: 30),
+//           Card(
+//             color: Colors.grey[900],
+//             elevation: 5,
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(20),
+//             ),
+//             child: Padding(
+//               padding: const EdgeInsets.all(16.0),
+//               child: Column(
+//                 children: [
+//                   Center(
+//                     child: Text(
+//                       "Player Details",
+//                       style: TextStyle(color: Colors.white, fontSize: 24),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 30),
+//                   _buildTextField("Age", ageController),
+//                   _buildTextField("ID/Passport", idPassportController),
+//                   _buildTextField("Weight", weightController),
+//                   _buildTextField("Height", heightController),
+//                   _buildPositionDropdown(),
+//                   const SizedBox(height: 30),
+//                   ElevatedButton(
+//                     onPressed: _submitPlayerDetails,
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: const Color(0xFFFFA500),
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 60, vertical: 15),
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(30),
+//                       ),
+//                     ),
+//                     child: const Text(
+//                       'Submit',
+//                       style: TextStyle(
+//                         color: Colors.white,
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 18,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildPositionDropdown() {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 10.0),
+//       child: DropdownButtonFormField<String>(
+//         decoration: InputDecoration(
+//           labelText: "Position",
+//           labelStyle: TextStyle(color: Colors.white),
+//           filled: true,
+//           fillColor: Colors.grey[800],
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(30),
+//           ),
+//         ),
+//         dropdownColor: Colors.grey[900],
+//         value: _selectedPosition,
+//         onChanged: (String? newValue) {
+//           setState(() {
+//             _selectedPosition = newValue;
+//           });
+//         },
+//         items: _positions.map((position) {
+//           return DropdownMenuItem<String>(
+//             value: position,
+//             child: Text(
+//               position,
+//               style: TextStyle(color: Colors.white),
+//             ),
+//           );
+//         }).toList(),
+//       ),
+//     );
+//   }
+
+//   Widget _buildTextField(String label, TextEditingController controller) {
+//     return Column(
+//       children: [
+//         TextField(
+//           controller: controller,
+//           decoration: InputDecoration(
+//             labelText: label,
+//             labelStyle: const TextStyle(color: Colors.white),
+//             filled: true,
+//             fillColor: Colors.grey[800],
+//             border: OutlineInputBorder(
+//               borderRadius: BorderRadius.circular(30),
+//             ),
+//           ),
+//           style: const TextStyle(color: Colors.white),
+//         ),
+//         const SizedBox(height: 20),
+//       ],
+//     );
+//   }
+// }
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -872,7 +1260,7 @@ import 'package:raiders_player_tracking/services/profile_service.dart'
 import 'package:raiders_player_tracking/services/players_service.dart';
 
 class AddPlayerDetails extends StatefulWidget {
-  final String userId; // Add userId as a parameter
+  final String userId;
   const AddPlayerDetails({Key? key, required this.userId}) : super(key: key);
 
   @override
@@ -880,15 +1268,19 @@ class AddPlayerDetails extends StatefulWidget {
 }
 
 class _AddPlayerDetailsState extends State<AddPlayerDetails> {
+  final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController(initialPage: 0);
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  // final TextEditingController emailController = TextEditingController();
   final TextEditingController cellNumberController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController idPassportController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController heightController = TextEditingController();
+  final TextEditingController cellController = TextEditingController();
+  final TextEditingController passportController = TextEditingController();
+
   String? _selectedPosition;
   final PlayersService _playersService = PlayersService();
 
@@ -909,59 +1301,60 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
   final auth.AuthService _authService = auth.AuthService();
 
   void _submitPlayerDetails() async {
-    setState(() {
-      // Optionally display a loading indicator here
-    });
+    if (_formKey.currentState?.validate() ?? false) {
+      // Proceed only if the form is valid
+      setState(() {
+        // Optionally display a loading indicator here
+      });
 
-    final response = await _profileService.createProfile(
-      firstName: nameController.text,
-      lastName: surnameController.text,
-      age: int.tryParse(ageController.text) ?? 0,
-      idOrPassportNumber: idPassportController.text,
-      weight: double.tryParse(weightController.text) ?? 0.0,
-      height: double.tryParse(heightController.text) ?? 0.0,
-      position: _selectedPosition ?? 'Position not selected',
-    );
+      final response = await _profileService.createProfile(
+        firstName: nameController.text,
+        lastName: surnameController.text,
+        age: int.tryParse(ageController.text) ?? 0,
+        idOrPassportNumber: idPassportController.text,
+        weight: double.tryParse(weightController.text) ?? 0.0,
+        height: double.tryParse(heightController.text) ?? 0.0,
+        position: _selectedPosition ?? 'Position not selected',
+        cellNumber: cellNumberController.text ?? '',
+        // id_or_passport_number: num.tryParse(cellController.text)
+      );
 
-    setState(() {
-      // Remove loading indicator here
-    });
+      setState(() {
+        // Remove loading indicator here
+      });
 
-    if (response != null && response.statusCode == 200) {
-      // Navigate to another page or display success message
-      print("Profile created successfully");
-    } else {
-      // Show an error message
-      print("Failed to create profile");
+      if (response != null && response.statusCode == 200) {
+        print("Profile created successfully");
+      } else {
+        print("Failed to create profile");
+      }
     }
   }
 
-  void _logout() async {
-    await _authService.logout();
-    Navigator.pushReplacementNamed(context, '/login');
+  @override
+  void initState() {
+    super.initState();
+    _loadPlayerData();
   }
 
   Future<void> _loadPlayerData() async {
-    // Retrieve the user ID from the route arguments
-    final userId = await _authService.getUserIdFromToken(); // Await the result
+    final userId = await _authService.getUserIdFromToken();
     if (userId == null) {
       print("User ID not found");
       return;
     }
 
     try {
-      // Fetch player profile data using the user ID
       final playerData = await _playersService.getPlayerById(userId);
-
       if (playerData != null) {
         setState(() {
-          // Populate all fields with the fetched player data
           nameController.text = playerData['first_name'] ?? '';
           surnameController.text = playerData['last_name'] ?? '';
-          emailController.text = playerData['email'] ?? '';
-          cellNumberController.text = playerData['cell_number'] ?? '';
+          // emailController.text = playerData['email'] ?? '';
+          cellNumberController.text =
+              playerData['cell_number'].toString() ?? '';
           ageController.text = playerData['age']?.toString() ?? '';
-          idPassportController.text = playerData['id_or_passport'] ?? '';
+          idPassportController.text = playerData['id_or_passport_number'] ?? '';
           weightController.text = playerData['weight']?.toString() ?? '';
           heightController.text = playerData['height']?.toString() ?? '';
           _selectedPosition = playerData['position'];
@@ -970,12 +1363,6 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
     } catch (e) {
       print("Error loading player data: $e");
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPlayerData(); // Fetch player data when the widget loads
   }
 
   @override
@@ -990,76 +1377,17 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarBrightness: Brightness.dark,
         ),
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onSelected: (value) {
-              if (value == 'logout') _logout();
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem<String>(
-                  value: 'logout',
-                  child: Text('Logout'),
-                ),
-              ];
-            },
-          ),
-        ],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(40, 1.2 * kToolbarHeight, 40, 20),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
+        child: Form(
+          key: _formKey,
+          child: PageView(
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(),
             children: [
-              Align(
-                alignment: AlignmentDirectional(3, -0.3),
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.deepPurple,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-3, -0.3),
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.deepPurple,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0, -1.2),
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 100.0, sigmaY: 100.0),
-                child: Container(
-                  decoration: const BoxDecoration(color: Colors.transparent),
-                ),
-              ),
-              PageView(
-                controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  _buildPageOne(context),
-                  _buildPageTwo(context),
-                ],
-              ),
+              _buildPageOne(context),
+              _buildPageTwo(context),
             ],
           ),
         ),
@@ -1096,16 +1424,50 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  _buildTextField("Name", nameController),
-                  _buildTextField("Surname", surnameController),
-                  _buildTextField("Email", emailController),
-                  _buildTextField("Cell Number", cellNumberController),
+                  _buildValidatedTextField("Name", nameController,
+                      validator: (value) =>
+                          value!.isEmpty ? "Name cannot be empty" : null),
+                  _buildValidatedTextField("Surname", surnameController,
+                      validator: (value) =>
+                          value!.isEmpty ? "Surname cannot be empty" : null),
+                  // _buildValidatedTextField(
+                  //   "Email",
+                  //   emailController,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return "Email cannot be empty";
+                  //     } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                  //       return "Enter a valid email";
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  _buildValidatedTextField(
+                    "Cell Number",
+                    cellNumberController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Cell number cannot be empty";
+                      } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                        return "Enter a valid 10-digit cell number";
+                      }
+                      return null;
+                    },
+                  ),
+                  _buildValidatedTextField(
+                    "ID/Passport",
+                    idPassportController,
+                    validator: (value) =>
+                        value!.isEmpty ? "ID/Passport cannot be empty" : null,
+                  ),
                   const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
+                      if (_formKey.currentState!.validate()) {
+                        _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFA500),
@@ -1162,32 +1524,129 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  _buildTextField("Age", ageController),
-                  _buildTextField("ID/Passport", idPassportController),
-                  _buildTextField("Weight", weightController),
-                  _buildTextField("Height", heightController),
+                  _buildValidatedTextField(
+                    "Age",
+                    ageController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Age cannot be empty";
+                      }
+                      final age = int.tryParse(value);
+                      if (age == null || age <= 0) {
+                        return "Enter a valid age";
+                      }
+                      return null;
+                    },
+                  ),
+                  _buildValidatedTextField(
+                    "Weight (kg)",
+                    weightController,
+                    validator: (value) {
+                      final weight = double.tryParse(value!);
+                      return weight == null || weight <= 0
+                          ? "Enter a valid weight"
+                          : null;
+                    },
+                  ),
+                  _buildValidatedTextField(
+                    "Height (cm)",
+                    heightController,
+                    validator: (value) {
+                      final height = double.tryParse(value!);
+                      return height == null || height <= 0
+                          ? "Enter a valid height"
+                          : null;
+                    },
+                  ),
                   _buildPositionDropdown(),
                   const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: _submitPlayerDetails,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFA500),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: const Text(
-                      'Submit',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
+                  _buildNavigationButtons(),
                 ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildValidatedTextField(
+      String label, TextEditingController controller,
+      {String? Function(String?)? validator}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: TextFormField(
+        controller: controller,
+        validator: validator,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.grey[800],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        style: const TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildNavigationButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Previous Button
+          Flexible(
+            child: ElevatedButton(
+              onPressed: () {
+                _pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFA500),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: const Text(
+                'Previous',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 20), // Adds spacing between buttons if needed
+
+          // Submit Button
+          Flexible(
+            child: ElevatedButton(
+              onPressed: _submitPlayerDetails,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 41, 160, 25),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: const Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
           ),
@@ -1226,27 +1685,6 @@ class _AddPlayerDetailsState extends State<AddPlayerDetails> {
           );
         }).toList(),
       ),
-    );
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return Column(
-      children: [
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(color: Colors.white),
-            filled: true,
-            fillColor: Colors.grey[800],
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-          ),
-          style: const TextStyle(color: Colors.white),
-        ),
-        const SizedBox(height: 20),
-      ],
     );
   }
 }

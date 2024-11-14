@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AuthService {
+class NotesService {
   final _storage = FlutterSecureStorage();
 
   // Retrieve token from secure storage
@@ -12,14 +12,10 @@ class AuthService {
 
   // Create Profile function
   Future<http.Response> createProfile({
-    required String firstName,
-    required String lastName,
-    required int age,
-    required String idOrPassportNumber,
-    required double weight,
-    required double height,
-    required String position,
-    required String cellNumber,
+    required String title,
+    required String description,
+    required int player_id,
+    required int coach_id,
   }) async {
     final token = await getToken();
     if (token == null) {
@@ -27,7 +23,7 @@ class AuthService {
     }
 
     final url = Uri.parse(
-        'http://raiders-player-tracking.af-south-1.elasticbeanstalk.com/api/profile'); // Update with your actual API URL
+        'http://raiders-player-tracking.af-south-1.elasticbeanstalk.com/api/notes'); // Update with your actual API URL
 
     final response = await http.post(
       url,
@@ -37,14 +33,10 @@ class AuthService {
             'Bearer $token', // Include token in Authorization header
       },
       body: jsonEncode({
-        'first_name': firstName,
-        'last_name': lastName,
-        'age': age,
-        'id_or_passport_number': idOrPassportNumber,
-        'weight': weight,
-        'height': height,
-        'position': position,
-        'cell_number': cellNumber
+        'title': title,
+        'description': description,
+        'player_id': player_id,
+        'coach_id': coach_id,
       }),
     );
 

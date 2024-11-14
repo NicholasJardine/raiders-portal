@@ -1710,21 +1710,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             title: 'Position',
                             value: _playerProfile?['position'] ?? 'N/A',
                           ),
+                          const SizedBox(height: 10),
+                          buildProfileDetail(
+                            title: 'Age',
+                            value: _playerProfile?['age'].toString() ?? 'N/A',
+                          ),
                           const SizedBox(height: 20),
                           buildProfileDetail(
-                            title: 'Full Name',
+                            title: 'Height',
                             value:
-                                '${_playerProfile?['first_name']} ${_playerProfile?['last_name']}',
+                                '${_playerProfile?['height'].toString()} cm ',
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 20),
                           buildProfileDetail(
-                            title: 'Email',
-                            value: _playerProfile?['email'] ?? 'N/A',
-                          ),
-                          const SizedBox(height: 10),
-                          buildProfileDetail(
-                            title: 'Position',
-                            value: _playerProfile?['position'] ?? 'N/A',
+                            title: 'Weight',
+                            value: '${_playerProfile?['weight'].toString()} kg',
                           ),
                         ],
                       ),
